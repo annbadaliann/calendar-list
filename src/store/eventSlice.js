@@ -7,11 +7,16 @@ export const eventSlice = createSlice({
   },
   reducers: {
     createEvent: (state, action) => {
-      console.log(state.value, state.events)
-        state.events = [...state.events, action.payload]
+      state.events = [...state.events, action.payload]
     },
     editEvent: (state, action) => {
-        console.log(state, 'state')
+      state.events = state.events.map(item => {
+        if (item.id === action.payload.id) {
+          return action.payload
+        }
+        return item;
+
+      })
     },
   },
 })

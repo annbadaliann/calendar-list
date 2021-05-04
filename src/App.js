@@ -67,13 +67,15 @@ const tableHeads = [
 function App() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [clickedEvent, setClickedEvent] = useState();
+  const [mode, setMode] = useState();
 
   const events = useSelector(selectEvents)
 
   const classes = useStyles();
 
-  const openDialog = (e, item) => {
+  const openDialog = (e, item, mode ) => {
     setIsDialogOpen(true);
+    setMode(mode)
     setClickedEvent(item);
   }
 
@@ -85,7 +87,7 @@ function App() {
     <div className={classes.tableWrapper}>
       <Box mb={3} display="flex" justifyContent="space-between">
       <Typography align="center" variant="h4" >{new Date().toLocaleDateString()}</Typography>
-        <Button variant="contained" color="primary" onClick={openDialog}>Add event</Button>
+        <Button variant="contained" color="primary" onClick={(e) => openDialog(e, null, 'create')}>Add event</Button>
       </Box>
 
       <TableContainer component={Paper}>
@@ -120,18 +122,20 @@ function App() {
       </TableContainer>
 
 
-      {isDialogOpen && <AddEventDialog open={isDialogOpen} onClose={closeDialog} clickedEvent={clickedEvent}/>}
+      {isDialogOpen && <AddEventDialog open={isDialogOpen} onClose={closeDialog} clickedEvent={clickedEvent} mode={mode}/>}
 
       <Grid container spacing={2}>
 
-        {events?.map(item => (
-          <Grid item xl={4}>
+        {events?.map((item) => (
+          <Grid item xl={4} key={item.id}>
             <Card style={{ padding: '8px', margin: "20px 0", cursor: 'default' }}>
+            {/* <Typography>id: {item.id}</Typography> */}
+
               <Box display="flex" justifyContent="space-between">
                 <Typography>
                   Event name: {item.eventName}
                 </Typography>
-                <EditIcon onClick={(e) => openDialog(e,item)} style={{ cursor: 'pointer', color: '#6b6b6b' }} />
+                <EditIcon onClick={(e) => openDialog(e, item, 'edit')} style={{ cursor: 'pointer', color: '#6b6b6b' }} />
               </Box>
               <Typography>
                 Description: {item.description}
