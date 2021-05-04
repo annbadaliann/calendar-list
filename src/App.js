@@ -1,11 +1,9 @@
 import React from 'react';
-import CalendarTable from './components/CalendarTable';
-
-
+import CalendarPage from './components/CalendarPage/index';
 
 function App() {
   return (
-      <CalendarTable />
+      <CalendarPage />
   );
 }
 
