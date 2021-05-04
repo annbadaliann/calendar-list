@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react';
+
+import { useDispatch } from 'react-redux';
+import { nanoid } from '@reduxjs/toolkit';
+
+import { Controller, useForm } from 'react-hook-form';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Controller, useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 
-import { createEvent, editEvent } from './store/eventSlice'
-import { nanoid } from '@reduxjs/toolkit';
+import { createEvent, editEvent } from '../store/slices/eventSlice'
 
 export default function AddEventDialog({ open, onClose, clickedEvent, mode }) {
-  const { register, handleSubmit, setValue, watch, control } = useForm();
-
+  const { handleSubmit, setValue, control } = useForm();
   const dispatch = useDispatch();
 
   const handleClose = () => {
     onClose()
   };
-
-  console.log(mode, 'mode')
 
   useEffect(() => {
     if (clickedEvent) {
@@ -29,26 +29,26 @@ export default function AddEventDialog({ open, onClose, clickedEvent, mode }) {
     }
   }, [clickedEvent, setValue])
 
-  const submit = (formData) => {
-    console.log(formData, 'formm data');
 
+  const submit = (formData) => {
     const createForm = {
       ...formData,
       id: nanoid()
     }
 
-
     const editForm = {
       ...formData,
       id: clickedEvent?.id
     }
-    debugger;
 
     if (mode === 'edit') {
       dispatch(editEvent(editForm))
-    } else {
+    }
+    
+    if(mode === 'create'){
       dispatch(createEvent(createForm));
     }
+
     handleClose();
   }
 
